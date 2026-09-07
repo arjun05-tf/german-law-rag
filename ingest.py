@@ -1,0 +1,106 @@
+"""
+Embed the parsed law chunks and load them into Qdrant.
+
+Model choice: intfloat/multilingual-e5-base. Not because it's the strongest
+German model - a German-only model would score better on German-to-German
+retrieval. But queries here arrive in English ("how many hours can I work?")
+against German source text, so we need a shared vector space across both
+languages. A monolingual model can't do that.
+
+    pip install sentence-transformers qdrant-client
+
+First run downloads ~1.1GB of model weights.
+
+Usage:
+    python ingest.py                      # embed + upload
+    python ingest.py --ask "Pausen"       # sanity-check retrieval
+"""
+
+import argparse
+import json
+
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, PointStruct, VectorParams
+from sentence_transformers import SentenceTransformer
+
+MODEL = "intfloat/multilingual-e5-base"
+DIM = 768                    # must match the model; Qdrant rejects mismatches
+COLLECTION = "gesetze"
+
+
+def load_model():
+    return SentenceTransformer(MODEL)
+
+
+def embed_passages(model, texts):
+    # e5 was trained with these prefixes and expects them at inference. Drop
+    # them and quality degrades quietly - no error, just worse results.
+    return model.encode([f"passage: {t}" for t in texts], show_progress_bar=True)
+
+
+def embed_query(model, text):
+    return model.encode(f"query: {text}")
+
+
+def ingest(path):
+    chunks = [json.loads(line) for line in open(path, encoding="utf-8")]
+    print(f"{len(chunks)} chunks")
+
+    model = load_model()
+    vectors = embed_passages(model, [c["text"] for c in chunks])
+
+    client = QdrantClient(url="http://localhost:6333")
+    # recreate on every run: ingest should be idempotent while we're still
+    # changing the chunking. Once the pipeline settles this becomes an upsert.
+    client.recreate_collection(
+        collection_name=COLLECTION,
+        vectors_config=VectorParams(size=DIM, distance=Distance.COSINE),
+    )
+
+    client.upsert(
+        collection_name=COLLECTION,
+        points=[
+            # Qdrant needs an integer or UUID id, so the human-readable chunk id
+            # lives in the payload instead. Payload is what comes back on search
+            # - the citation matters more than the vector at that point.
+            PointStruct(id=i, vector=vec.tolist(), payload=chunk)
+            for i, (chunk, vec) in enumerate(zip(chunks, vectors))
+        ],
+    )
+    print(f"uploaded to '{COLLECTION}'")
+
+
+def ask(question, k=5):
+    model = load_model()
+    client = QdrantClient(url="http://localhost:6333")
+
+    hits = client.query_points(
+        collection_name=COLLECTION,
+        query=embed_query(model, question).tolist(),
+        limit=k,
+    ).points
+
+    print(f"\nQ: {question}\n")
+    for h in hits:
+        p = h.payload
+        # Score is cosine similarity. Watch the spread, not the absolute value:
+        # if the top 5 all sit within ~0.02 of each other, retrieval isn't
+        # actually discriminating and the reranker will have to earn its place.
+        print(f"[{h.score:.3f}] {p['citation']} - {p['paragraph_title']}")
+        print(f"        {p['text'][:160]}...\n")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--chunks", default="arbzg.jsonl")
+    ap.add_argument("--ask")
+    args = ap.parse_args()
+
+    if args.ask:
+        ask(args.ask)
+    else:
+        ingest(args.chunks)
+
+
+if __name__ == "__main__":
+    main()
