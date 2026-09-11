@@ -3,3 +3,4 @@
 *.jsonl
 qdrant_data/
 __pycache__/
+.env
