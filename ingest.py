@@ -18,6 +18,11 @@ Usage:
 
 import argparse
 import json
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+load_dotenv()
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
@@ -95,14 +100,48 @@ def ask(question, k=5):
     context = build_context(hits)
     print(context)
 
+SYSTEM_PROMPT = """You answer questions about German employment law.
+
+Rules:
+- Answer ONLY from the provided paragraphs. Do not use outside knowledge.
+- Cite the paragraph you used, e.g. § 4 ArbZG.
+- If the provided paragraphs do not contain the answer, say so plainly.
+"""
+
+def answer(question, k=5):
+    model = load_model()
+    client = QdrantClient(url="http://localhost:6333")
+    hits = client.query_points(
+        collection_name=COLLECTION,
+        query=embed_query(model, question).tolist(),
+        limit=k,
+    ).points
+
+    context = build_context(hits)
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Paragraphs: \n\n{context}\n\nQuestion: {question}"}
+        ],
+    )
+
+    print(response.choices[0].message.content)
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--chunks", default="arbzg.jsonl")
     ap.add_argument("--ask")
+    ap.add_argument("--answer")
     args = ap.parse_args()
 
-    if args.ask:
+    if args.answer:
+        answer(args.answer)
+    elif args.ask:
         ask(args.ask)
     else:
         ingest(args.chunks)
