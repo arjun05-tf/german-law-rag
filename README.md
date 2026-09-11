@@ -17,7 +17,8 @@ works on any federal law from gesetze-im-internet.de.
 | 1. Parse | `parse_law.py` | 80 Absatz-level chunks with § metadata |
 | 2. Embed | `multilingual-e5-base` | 768-dim vectors |
 | 3. Index | Qdrant | searchable collection |
-| 4. Query | `ingest.py --ask` | top-k chunks with citations |
+| 4. Retrieve | `ingest.py --ask` | top-k chunks with citations |
+| 5. Generate | `gpt-4o-mini` | grounded answer with § references |
 
 ---
 
@@ -38,8 +39,17 @@ two languages.
 
 **Qdrant**
 
-Overkill at 80 chunks — NumPy would do. Used because it's what scales, and it
+Overkill at 80 chunks, NumPy would do. Used because it's what scales, and it
 gives persistence and metadata filtering for free.
+
+**Grounding over recall**
+
+The retriever always returns k chunks, cosine similarity has no notion of
+"nothing matches," so an off-topic question still gets five confident-looking
+paragraphs back. Refusal therefore has to happen in the generation step: the
+model is instructed to answer only from the provided text and to say so when
+that text doesn't cover the question. For legal QA a confident wrong answer
+with a plausible citation is worse than no answer.
 
 ---
 
@@ -57,7 +67,17 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_storage:/qdrant/storage qdran
 pip install -r requirements.txt
 ```
 
-**3. Get the law**
+**3. Add your OpenAI key**
+
+Create a `.env` file in the project root:
+
+```
+OPENAI_API_KEY=sk-...
+```
+
+Used only for answer generation. Retrieval (`--ask`) works without it.
+
+**4. Get the law**
 
 ```bash
 curl -O https://www.gesetze-im-internet.de/arbzg/xml.zip
@@ -65,11 +85,19 @@ unzip xml.zip
 python parse_law.py BJNR117100994.xml -o arbzg.jsonl
 ```
 
-**4. Index and query**
+**5. Index and query**
 
 ```bash
 python ingest.py
+
+# retrieval only — see which paragraphs match
 python ingest.py --ask "Wie lange darf ich am Tag arbeiten?"
+
+# full answer, grounded in the retrieved paragraphs
+python ingest.py --answer "Wie lange sind meine Ruhepausen?"
+
+# refuses when the retrieved paragraphs don't cover the question
+python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 ```
 
 ---
@@ -79,9 +107,9 @@ python ingest.py --ask "Wie lange darf ich am Tag arbeiten?"
 **Working**
 - XML to 80 chunks with citation metadata
 - Dense retrieval over Qdrant
+- Answer generation grounded in retrieved paragraphs, with refusal when the retrieved text doesn't cover the question
 
 **Next**
-- Answer generation with enforced citations
 - Eval set with ground-truth § references
 - Hybrid retrieval + reranker, benchmarked
 - FastAPI service, Docker Compose, CI
