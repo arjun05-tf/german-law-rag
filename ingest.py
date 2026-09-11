@@ -70,6 +70,18 @@ def ingest(path):
     print(f"uploaded to '{COLLECTION}'")
 
 
+def build_context(hits):
+    parts = []
+    for h in hits:
+        p = h.payload
+        # Score is cosine similarity. Watch the spread, not the absolute value:
+        # if the top 5 all sit within ~0.02 of each other, retrieval isn't
+        # actually discriminating and the reranker will have to earn its place.
+        # print(f"[{h.score:.3f}] {p['citation']} - {p['paragraph_title']}")
+        # print(f"        {p['text'][:160]}...\n")
+        parts.append(f"[{p['citation']}] {p['text']}")
+    return "\n\n".join(parts)
+
 def ask(question, k=5):
     model = load_model()
     client = QdrantClient(url="http://localhost:6333")
@@ -80,14 +92,8 @@ def ask(question, k=5):
         limit=k,
     ).points
 
-    print(f"\nQ: {question}\n")
-    for h in hits:
-        p = h.payload
-        # Score is cosine similarity. Watch the spread, not the absolute value:
-        # if the top 5 all sit within ~0.02 of each other, retrieval isn't
-        # actually discriminating and the reranker will have to earn its place.
-        print(f"[{h.score:.3f}] {p['citation']} - {p['paragraph_title']}")
-        print(f"        {p['text'][:160]}...\n")
+    context = build_context(hits)
+    print(context)
 
 
 def main():
