@@ -53,6 +53,34 @@ with a plausible citation is worse than no answer.
 
 ---
 
+## Results
+
+Retrieval measured on 91 hand-labelled questions with ground-truth § references,
+in German and English.
+
+| Config | recall@1 | recall@5 | MRR |
+|---|---|---|---|
+| Dense (multilingual-e5-base) | 0.44 | 0.84 | 0.585 |
+| + cross-encoder reranker | | | |
+
+**By query language**
+
+| | n | recall@1 | recall@5 | MRR |
+|---|---|---|---|---|
+| German | 46 | 0.59 | 0.83 | 0.670 |
+| English | 45 | 0.29 | 0.84 | 0.498 |
+
+Recall@5 is near-identical across languages, but recall@1 is twice as high in
+German. The correct paragraph is found equally often and ranked worse, a
+ranking problem, not a retrieval one, which is what motivates the reranker.
+
+16% of questions miss entirely at k=5. These are mostly scenario questions
+("I worked until midnight and start at 6 a.m., is that allowed?") where the
+user describes a situation and the law states a rule. No reranker fixes those;
+the paragraph never enters the candidate set.
+
+---
+
 ## Setup
 
 **1. Start Qdrant**
