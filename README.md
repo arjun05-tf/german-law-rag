@@ -166,7 +166,7 @@ python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 
 **Next**
 - Separate the reranking effect from the wider candidate pool (rerank top-5 only)
-- Hybrid retrieval (BM25 + dense) — expected gains are limited given the current
+- Hybrid retrieval (BM25 + dense) - expected gains are limited given the current
   recall@5 ceiling of 0.90, so this is worth measuring rather than assuming
 - FastAPI service with the model loaded once at startup, Docker Compose, CI that
   fails on retrieval regression
