@@ -156,15 +156,22 @@ python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 ## Status
 
 **Working**
-- XML to 80 chunks with citation metadata
-- Dense retrieval over Qdrant
-- Answer generation grounded in retrieved paragraphs, with refusal when the retrieved text doesn't cover the question
-- Hybrid retrieval + reranker, benchmarked
-
+- Absatz-level parsing of official Bundesrecht XML into 80 chunks with § metadata
+- Dense retrieval over Qdrant with multilingual embeddings
+- Cross-encoder reranking, benchmarked against the dense baseline
+- Retrieval evaluation on 91 hand-labelled questions (recall@1, recall@5, MRR,
+  split by query language)
+- Answer generation grounded in retrieved paragraphs, with refusal when the
+  retrieved text doesn't cover the question
 
 **Next**
-- Eval set with ground-truth § references
-- FastAPI service, Docker Compose, CI
+- Separate the reranking effect from the wider candidate pool (rerank top-5 only)
+- Hybrid retrieval (BM25 + dense) — expected gains are limited given the current
+  recall@5 ceiling of 0.90, so this is worth measuring rather than assuming
+- FastAPI service with the model loaded once at startup, Docker Compose, CI that
+  fails on retrieval regression
+- Additional laws (BUrlG, MiLoG) with metadata filtering, and a router to select
+  the relevant law before retrieval
 
 ---
 
