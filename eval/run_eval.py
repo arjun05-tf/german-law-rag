@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from qdrant_client import QdrantClient
 
 from ingest import COLLECTION, embed_query, load_model
+from rerank import rerank
 
 QUESTIONS = Path(__file__).parent / "questions.jsonl"
 
@@ -63,7 +64,7 @@ def rank_of_expected(hits, expected):
             return i
     return None
 
-def evaluate(k=5):
+def evaluate(k=5, use_rerank=False, k_retrieve=20):
     rows = load_questions(QUESTIONS)
     rows = [r for r in rows if r["expected"]]
     model = load_model()
@@ -74,8 +75,12 @@ def evaluate(k=5):
         hits = qdrant.query_points(
             collection_name=COLLECTION,
             query=embed_query(model, row["question"]).tolist(),
-            limit=k,
+            limit=k_retrieve if use_rerank else k,
         ).points
+
+        if use_rerank:
+            hits = rerank(row["question"], hits, top_k=k)
+
         results.append({**row, "rank": rank_of_expected(hits, row["expected"])})
 
     report(results, k)
@@ -135,8 +140,10 @@ def report(results, k):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--k", type=int, default=5)
+    ap.add_argument("--rerank", action="store_true")
     args = ap.parse_args()
     evaluate(args.k)
+    evaluate(args.k, use_rerank=args.rerank)
 
 
 if __name__ == "__main__":

@@ -58,7 +58,7 @@ with a plausible citation is worse than no answer.
 Retrieval measured on 91 hand-labelled questions with ground-truth § references,
 in German and English.
 
-| Config | recall@1 | recall@5 | MRR |
+<!-- | Config | recall@1 | recall@5 | MRR |
 |---|---|---|---|
 | Dense (multilingual-e5-base) | 0.44 | 0.84 | 0.585 |
 | + cross-encoder reranker | | | |
@@ -77,7 +77,30 @@ ranking problem, not a retrieval one, which is what motivates the reranker.
 16% of questions miss entirely at k=5. These are mostly scenario questions
 ("I worked until midnight and start at 6 a.m., is that allowed?") where the
 user describes a situation and the law states a rule. No reranker fixes those;
-the paragraph never enters the candidate set.
+the paragraph never enters the candidate set. -->
+
+| Config | recall@1 | recall@5 | MRR |
+|---|---|---|---|
+| Dense (top-5) | 0.44 | 0.84 | 0.585 |
+| Dense top-20 + cross-encoder rerank | 0.60 | 0.90 | 0.722 |
+
+**By query language**
+
+| | recall@1 (dense) | recall@1 (reranked) | recall@5 (dense) | recall@5 (reranked) |
+|---|---|---|---|---|
+| German | 0.59 | 0.59 | 0.83 | 0.89 |
+| English | 0.29 | 0.60 | 0.84 | 0.91 |
+
+Reranking doubled English recall@1 and left German unchanged, closing a 30-point
+cross-lingual gap to one point. A cross-encoder can only reorder candidates, so
+this is direct evidence that the English deficit was a ranking failure rather than
+a retrieval failure — the correct paragraph was already being found and ordered
+badly.
+
+Caveat: recall@5 also rose in both languages. Reordering five results cannot change
+whether the answer is among them, so that gain comes from widening the candidate
+pool from 5 to 20 before reranking, not from the reranker itself. The two effects
+are confounded in this run and would need separating to attribute cleanly.
 
 ---
 
@@ -136,10 +159,11 @@ python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 - XML to 80 chunks with citation metadata
 - Dense retrieval over Qdrant
 - Answer generation grounded in retrieved paragraphs, with refusal when the retrieved text doesn't cover the question
+- Hybrid retrieval + reranker, benchmarked
+
 
 **Next**
 - Eval set with ground-truth § references
-- Hybrid retrieval + reranker, benchmarked
 - FastAPI service, Docker Compose, CI
 
 ---
