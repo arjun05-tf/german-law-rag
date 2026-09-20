@@ -1,0 +1,56 @@
+question,lang,population,claim,cited,score,predicted_supported,supported_truth
+Wie lange sind meine Ruhepausen?,de,in_scope,Die Ruhepausen betragen mindestens 30 Minuten bei einer Arbeitszeit von mehr als sechs bis zu neun Stunden.,§ 4 ArbZG,0.9995,1,1
+Wie lange sind meine Ruhepausen?,de,in_scope,Die Ruhepausen betragen 45 Minuten bei einer Arbeitszeit von mehr als neun Stunden.,§ 4 ArbZG,0.9986,1,1
+Wie lange sind meine Ruhepausen?,de,in_scope,Diese Pausen können in Zeitabschnitte von jeweils mindestens 15 Minuten aufgeteilt werden.,§ 4 ArbZG,0.9989,1,1
+Wie lange sind meine Ruhepausen?,de,in_scope,Länger als sechs Stunden hintereinander dürfen Arbeitnehmer nicht ohne Ruhepause beschäftigt werden.,§ 4 ArbZG,0.9989,1,1
+how long is my break entitlement,en,in_scope,The break entitlement is a minimum of 30 minutes for a working time of more than six hours up to nine hours.,§ 4 ArbZG,0.9924,1,1
+how long is my break entitlement,en,in_scope,The break entitlement is 45 minutes for a working time of more than nine hours.,§ 4 ArbZG,0.9902,1,1
+how long is my break entitlement,en,in_scope,The breaks can be divided into segments of at least 15 minutes each.,§ 4 ArbZG,0.9887,1,1
+how long is my break entitlement,en,in_scope,No employee may work without a break for longer than six hours.,§ 4 ArbZG,0.9791,1,1
+Wie lange darf ich am Tag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit der Arbeitnehmer darf acht Stunden nicht überschreiten.,§ 3 ArbZG,0.9994,1,0
+Wie lange darf ich am Tag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit der Arbeitnehmer kann auf bis zu zehn Stunden verlängert werden.,§ 3 ArbZG,0.9988,1,1
+Wie lange darf ich am Tag arbeiten?,de,in_scope,"Die Verlängerung der werktäglichen Arbeitszeit auf bis zu zehn Stunden ist nur zulässig, wenn innerhalb von sechs Kalendermonaten im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,0.9999,1,1
+Wie lange darf ich am Tag arbeiten?,de,in_scope,"Die Verlängerung der werktäglichen Arbeitszeit auf bis zu zehn Stunden ist nur zulässig, wenn innerhalb von 24 Wochen im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,1.0,1,1
+what is the maximum daily working time,en,in_scope,The maximum daily working time is eight hours.,§ 3 ArbZG,0.8627,1,0
+what is the maximum daily working time,en,in_scope,The maximum daily working time can be extended to up to ten hours.,§ 3 ArbZG,0.9469,1,1
+what is the maximum daily working time,en,in_scope,The average daily working time must not exceed eight hours within six calendar months or 24 weeks.,§ 3 ArbZG,0.9967,1,0
+Wie lange muss die Ruhezeit zwischen zwei Arbeitstagen sein?,de,in_scope,Die Ruhezeit zwischen zwei Arbeitstagen muss mindestens elf Stunden betragen.,§ 5 Abs. 1 ArbZG,0.9877,1,1
+Wie lange muss die Ruhezeit zwischen zwei Arbeitstagen sein?,de,in_scope,Die Regelung ist im § 5 Abs. 1 ArbZG festgelegt.,§ 4 ArbZG,0.0442,0,0
+how much rest do I need between shifts,en,in_scope,You need an uninterrupted rest period of at least eleven hours after the end of your daily working time.,§ 5 Abs. 1 ArbZG,0.9994,1,
+how much rest do I need between shifts,en,in_scope,This is stated in § 5 Abs. 1 ArbZG.,§ 4 ArbZG,0.0716,0,
+Was gilt als Nachtzeit?,de,in_scope,Nachtzeit im Sinne dieses Gesetzes ist die Zeit von 23 bis 6 Uhr.,§ 2 Abs. 3 ArbZG,0.999,1,
+Was gilt als Nachtzeit?,de,in_scope,In Bäckereien und Konditoreien ist die Nachtzeit die Zeit von 22 bis 5 Uhr.,§ 2 Abs. 3 ArbZG,0.9992,1,
+Was gilt als Nachtzeit?,de,in_scope,(§ 2 Abs. 3 ArbZG),§ 6 Abs. 2 ArbZG,0.0575,0,
+when does night work legally begin,en,in_scope,"Nachtarbeit im Sinne dieses Gesetzes ist jede Arbeit, die mehr als zwei Stunden der Nachtzeit umfaßt.",§ 2 Abs. 4 ArbZG,1.0,1,
+when does night work legally begin,en,in_scope,Night work legally begins when the work encompasses more than two hours of nighttime.,§ 2 Abs. 4 ArbZG,0.9973,1,
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit der Arbeitnehmer darf acht Stunden nicht überschreiten.,§ 3 ArbZG,0.9994,1,
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit kann auf bis zu zehn Stunden verlängert werden.,§ 3 ArbZG,0.9985,1,
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,"Die Verlängerung der werktäglichen Arbeitszeit auf bis zu zehn Stunden ist zulässig, wenn innerhalb von sechs Kalendermonaten im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,0.9997,1,
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,"Die Verlängerung der werktäglichen Arbeitszeit auf bis zu zehn Stunden ist zulässig, wenn innerhalb von 24 Wochen im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,0.9998,1,
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,(§ 3 ArbZG),§ 7 Abs. 8 ArbZG,0.0177,0,
+Darf ich länger als acht Stunden am Tag arbeiten?,de,in_scope,Sie dürfen länger als acht Stunden am Tag arbeiten.,§ 3 ArbZG,0.9501,1,
+Darf ich länger als acht Stunden am Tag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit kann auf bis zu zehn Stunden verlängert werden.,§ 3 ArbZG,0.9985,1,
+Darf ich länger als acht Stunden am Tag arbeiten?,de,in_scope,Die werktägliche Arbeitszeit darf im Durchschnitt innerhalb von sechs Kalendermonaten oder innerhalb von 24 Wochen acht Stunden werktäglich nicht überschreiten.,§ 3 ArbZG,0.9997,1,
+Darf ich länger als acht Stunden am Tag arbeiten?,de,in_scope,Ähnliche Regelungen gelten bei Nachtarbeitnehmern.,§ 6 Abs. 2 ArbZG,0.513,1,
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,Die gesetzliche Höchstarbeitszeit pro Tag beträgt acht Stunden.,§ 3 ArbZG,0.8773,1,
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,Die gesetzliche Höchstarbeitszeit kann auf bis zu zehn Stunden verlängert werden.,§ 3 ArbZG,0.9834,1,
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,"Die Verlängerung der gesetzlichen Höchstarbeitszeit auf bis zu zehn Stunden ist möglich, wenn innerhalb von sechs Kalendermonaten im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,0.9996,1,
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,"Die Verlängerung der gesetzlichen Höchstarbeitszeit auf bis zu zehn Stunden ist möglich, wenn innerhalb von 24 Wochen im Durchschnitt acht Stunden werktäglich nicht überschritten werden.",§ 3 ArbZG,0.9996,1,
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,(§ 3 ArbZG),§ 7 Abs. 8 ArbZG,0.0177,0,
+What is the normal maximum number of working hours per day?,en,in_scope,The normal maximum number of working hours per day is eight hours.,§ 3 ArbZG,0.8643,1,
+What is the normal maximum number of working hours per day?,en,in_scope,The maximum number of working hours per day can be extended to up to ten hours.,§ 3 ArbZG,0.9456,1,
+What is the normal maximum number of working hours per day?,en,in_scope,"The extension to ten hours is only allowed if, on average, eight hours per day are not exceeded within six calendar months.",§ 3 ArbZG,0.9991,1,
+What is the normal maximum number of working hours per day?,en,in_scope,"The extension to ten hours is only allowed if, on average, eight hours per day are not exceeded within 24 weeks.",§ 3 ArbZG,0.9991,1,
+Wie viel Urlaub muss mir mein Arbeitgeber geben?,de,out_of_scope,Die bereitgestellten Paragraphen enthalten keine Informationen über den gesetzlichen Urlaubsanspruch von Arbeitnehmern in Deutschland.,§ 4 ArbZG,0.004,0,
+Wie viel Urlaub muss mir mein Arbeitgeber geben?,de,out_of_scope,Ich kann diese Frage nicht beantworten.,§ 4 ArbZG,0.0001,0,
+How many vacation days am I legally entitled to?,en,out_of_scope,The provided paragraphs do not contain information about the legal entitlement to vacation days.,§ 12 ArbZG,0.0021,0,
+Wie hoch ist der gesetzliche Mindestlohn?,de,out_of_scope,Die bereitgestellten Paragraphen enthalten keine Informationen über den gesetzlichen Mindestlohn.,§ 22 Abs. 2 ArbZG,0.0002,0,
+What is the statutory minimum wage in Germany?,en,out_of_scope,The provided paragraphs do not contain information about the statutory minimum wage.,§ 18 Abs. 2 ArbZG,0.0005,0,
+What is the statutory minimum wage in Germany?,en,out_of_scope,The statutory minimum wage is in Germany.,§ 1 ArbZG,0.0005,0,
+Darf mein Arbeitgeber mein Gehalt kürzen?,de,out_of_scope,Die bereitgestellten Absätze enthalten keine Informationen über die Kürzung des Gehalts durch den Arbeitgeber.,§ 7 Abs. 5 ArbZG,0.0038,0,
+Darf mein Arbeitgeber mein Gehalt kürzen?,de,out_of_scope,Ich kann die Frage nicht beantworten.,§ 7 Abs. 7 ArbZG,0.0001,0,
+Can my employer reduce my salary without my consent?,en,out_of_scope,The provided paragraphs do not contain any information regarding an employer's ability to reduce an employee's salary without consent.,§ 7 Abs. 7 ArbZG,0.0135,0,
+Can my employer reduce my salary without my consent?,en,out_of_scope,I cannot answer that question based on the provided paragraphs.,§ 7 Abs. 7 ArbZG,0.001,0,
+Wie lange ist meine Kündigungsfrist?,de,out_of_scope,Die bereitgestellten Absätze enthalten keine Information zur Kündigungsfrist.,§ 7 Abs. 7 ArbZG,0.0023,0,
+Wie lange ist meine Kündigungsfrist?,de,out_of_scope,Ich kann diese Frage nicht beantworten.,§ 7 Abs. 7 ArbZG,0.0002,0,
+How long is my notice period?,en,out_of_scope,The provided paragraphs do not contain information about notice periods.,§ 14 Abs. 3 ArbZG,0.0005,0,

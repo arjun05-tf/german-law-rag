@@ -16,6 +16,8 @@ Usage:
     python ingest.py --ask "Pausen"       # sanity-check retrieval
 """
 
+from attribute import attributed_answer, render
+
 import argparse
 import json
 import os
@@ -132,14 +134,43 @@ def answer(question, k=5):
     print(response.choices[0].message.content)
 
 
+def answer_attributed(question, k=5):
+    model = load_model()
+    qdrant = QdrantClient(url="http://localhost:6333")
+
+    hits = qdrant.query_points(
+        collection_name=COLLECTION,
+        query=embed_query(model, question).tolist(),
+        limit=k,
+    ).points
+
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user",
+             "content": f"Paragraphs:\n\n{build_context(hits)}\n\nQuestion: {question}"},
+        ],
+    )
+    answer_text = response.choices[0].message.content
+
+    print(f"\nRaw answer:\n{answer_text}\n")
+    print("Attribution:")
+    print(render(attributed_answer(question, hits, answer_text, client)))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--chunks", default="arbzg.jsonl")
     ap.add_argument("--ask")
     ap.add_argument("--answer")
+    ap.add_argument("--attributed")
     args = ap.parse_args()
 
-    if args.answer:
+    if args.attributed:
+        answer_attributed(args.attributed)
+    elif args.answer:
         answer(args.answer)
     elif args.ask:
         ask(args.ask)

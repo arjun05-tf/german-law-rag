@@ -1,0 +1,114 @@
+question,lang,population,top_citation,top1,top2,mean_top5,gap,rerank1
+Wie lange sind meine Ruhepausen?,de,in_scope,§ 4 ArbZG,0.8851103,0.8702606,0.867014264,0.014849699999999966,0.9547309875488281
+how long is my break entitlement,en,in_scope,§ 14 Abs. 3 ArbZG,0.81742847,0.81467146,0.813228374,0.0027570099999999487,0.007888599298894405
+Wie lange darf ich am Tag arbeiten?,de,in_scope,§ 3 ArbZG,0.88971865,0.8853454,0.881506538,0.004373250000000106,0.9128933548927307
+what is the maximum daily working time,en,in_scope,§ 3 ArbZG,0.8423263,0.8413545,0.8366791920000001,0.0009717999999999671,0.58406662940979
+Wie lange muss die Ruhezeit zwischen zwei Arbeitstagen sein?,de,in_scope,§ 11 Abs. 3 ArbZG,0.8835645,0.8783511,0.8770455939999999,0.005213399999999924,0.8288073539733887
+how much rest do I need between shifts,en,in_scope,§ 4 ArbZG,0.8250761,0.82489216,0.819093616,0.00018393999999999355,0.20257364213466644
+Was gilt als Nachtzeit?,de,in_scope,§ 2 Abs. 3 ArbZG,0.88603866,0.8643673,0.8642588840000001,0.02167136000000003,0.9544951319694519
+when does night work legally begin,en,in_scope,§ 2 Abs. 5 ArbZG,0.84248555,0.82416606,0.8232343719999999,0.018319489999999994,0.2938052713871002
+Wie viele Stunden darf ich normalerweise pro Werktag arbeiten?,de,in_scope,§ 3 ArbZG,0.88678634,0.88135517,0.88008863,0.005431170000000041,0.9461673498153687
+Darf ich länger als acht Stunden am Tag arbeiten?,de,in_scope,§ 3 ArbZG,0.892768,0.8791656,0.878820836,0.013602400000000014,0.9853036403656006
+Was ist die gesetzliche Höchstarbeitszeit pro Tag?,de,in_scope,§ 3 ArbZG,0.86894023,0.8626629,0.862293496,0.00627732999999997,0.5739191174507141
+What is the normal maximum number of working hours per day?,en,in_scope,§ 3 ArbZG,0.82138723,0.821056,0.819961606,0.0003312300000000157,0.6487155556678772
+Can I legally work more than eight hours in a day?,en,in_scope,§ 3 ArbZG,0.8340051,0.831237,0.8297281120000001,0.002768100000000051,0.9592680335044861
+How many hours may an employee work per day under the law?,en,in_scope,§ 15 Abs. 4 ArbZG,0.8149203,0.81223917,0.81173856,0.0026811300000000315,0.8202819228172302
+Ab wann muss ich eine Pause machen?,de,in_scope,§ 4 ArbZG,0.8518724,0.8424704,0.83912406,0.009402000000000021,0.610044538974762
+Wie viele Minuten Pause stehen mir bei langer Arbeitszeit zu?,de,in_scope,§ 4 ArbZG,0.88845265,0.88024473,0.873312956,0.008207919999999924,0.9781364798545837
+Welche Pausen sind während der Arbeitszeit vorgeschrieben?,de,in_scope,§ 4 ArbZG,0.87895775,0.8669195,0.8619546619999999,0.012038250000000028,0.9510249495506287
+When am I legally required to take a break?,en,in_scope,§ 4 ArbZG,0.8123876,0.81086123,0.806904426,0.0015263699999999991,0.24676185846328735
+How many minutes of break are required during a workday?,en,in_scope,§ 5 Abs. 1 ArbZG,0.8262404,0.82588077,0.8181202040000001,0.00035962999999994416,0.9016308188438416
+What breaks must an employer provide during working hours?,en,in_scope,§ 5 Abs. 1 ArbZG,0.8091694,0.80587465,0.8021397880000001,0.003294750000000013,0.6785247325897217
+Wie lang muss die Ruhezeit nach der Arbeit sein?,de,in_scope,§ 7 Abs. 9 ArbZG,0.8931204,0.8897229,0.8834779879999999,0.0033975000000000533,0.9893695116043091
+Wie viele Stunden müssen zwischen zwei Schichten liegen?,de,in_scope,§ 4 ArbZG,0.83936894,0.83289796,0.8336324599999999,0.006470979999999904,0.12734605371952057
+Wie viel Zeit muss ich zwischen zwei Arbeitseinsätzen haben?,de,in_scope,§ 4 ArbZG,0.8643082,0.8606167,0.86034798,0.0036914999999999587,0.09119793027639389
+How many hours of rest are required between shifts?,en,in_scope,§ 9 Abs. 2 ArbZG,0.814613,0.81287545,0.8079067560000001,0.0017375499999999766,0.4282458424568176
+How long must the rest period between two working days be?,en,in_scope,§ 7 Abs. 9 ArbZG,0.83292633,0.83130896,0.826647364,0.0016173700000000624,0.5634891390800476
+What is the minimum rest period after a work shift?,en,in_scope,§ 7 Abs. 9 ArbZG,0.8241935,0.8234374,0.818284692,0.0007561000000000373,0.7212662100791931
+Was bedeutet Nachtzeit nach dem Arbeitszeitgesetz?,de,in_scope,§ 2 Abs. 4 ArbZG,0.8850552,0.88027215,0.874748316,0.004783050000000011,0.9480301737785339
+Welche Uhrzeit gilt gesetzlich als Nachtzeit?,de,in_scope,§ 2 Abs. 3 ArbZG,0.8868025,0.85928637,0.8597290940000001,0.027516130000000083,0.9852157831192017
+Wann beginnt und endet die Nachtzeit?,de,in_scope,§ 2 Abs. 3 ArbZG,0.8714099,0.84297645,0.8476127419999999,0.02843344999999997,0.8422618508338928
+What hours count as night time under the Working Time Act?,en,in_scope,§ 2 Abs. 4 ArbZG,0.8268612,0.8268572,0.818132894,4.000000000004e-06,0.9439540505409241
+What time period is legally defined as night time?,en,in_scope,§ 2 Abs. 3 ArbZG,0.81918293,0.7973209,0.7981693759999999,0.021862029999999977,0.9352306127548218
+Darf mein Arbeitgeber mich neun Stunden am Tag arbeiten lassen?,de,in_scope,§ 3 ArbZG,0.86326313,0.8628799,0.8572064660000001,0.00038322999999995666,0.2305283397436142
+Ich arbeite zehn Stunden. Muss ich eine Pause bekommen?,de,in_scope,§ 5 Abs. 1 ArbZG,0.870355,0.8650489,0.85763976,0.00530609999999998,0.7419258952140808
+Ich habe eine Spätschicht und fange am nächsten Morgen früh an. Wie viel Ruhezeit muss dazwischen liegen?,de,in_scope,§ 4 ArbZG,0.86634576,0.86336535,0.857555602,0.0029804099999999334,0.4875470697879791
+I work a long shift. When does a statutory break become necessary?,en,in_scope,§ 7 Abs. 9 ArbZG,0.81396437,0.81195116,0.807854676,0.0020132099999999875,0.033313244581222534
+Can my employer schedule me for nine hours of work in one day?,en,in_scope,§ 13 Abs. 5 ArbZG,0.8149245,0.8138714,0.812462612,0.001053100000000029,0.05229699984192848
+"If I finish a shift at 11 pm, how much rest should I normally get before the next shift?",en,in_scope,§ 7 Abs. 9 ArbZG,0.8296199,0.826122,0.818676168,0.0034978999999999427,0.06507191807031631
+Kann ich 12 Stunden am Stück arbeiten?,de,in_scope,§ 7 Abs. 9 ArbZG,0.85425,0.84874815,0.8461721839999999,0.005501849999999919,0.7918947339057922
+"Wenn ich 10 Stunden arbeite, wie viel Pause brauche ich?",de,in_scope,§ 4 ArbZG,0.8695034,0.86734664,0.859982076,0.002156760000000091,0.7145820260047913
+Can I work for 12 hours continuously under the Working Time Act?,en,in_scope,§ 7 Abs. 9 ArbZG,0.82316995,0.8184264,0.8181550639999999,0.004743550000000041,0.7995028495788574
+"If I work ten hours, how much break time is required?",en,in_scope,§ 5 Abs. 1 ArbZG,0.8398762,0.83565664,0.828769108,0.004219560000000011,0.5049806833267212
+Wie viel Urlaub muss mir mein Arbeitgeber geben?,de,out_of_scope,§ 3 ArbZG,0.86072195,0.8596109,0.857188128,0.0011110500000000023,0.0664273127913475
+How many vacation days am I legally entitled to?,en,out_of_scope,§ 14 Abs. 3 ArbZG,0.8155257,0.8064256,0.807172228,0.009100100000000055,0.0101688327267766
+Wie hoch ist der gesetzliche Mindestlohn?,de,out_of_scope,§ 22 Abs. 2 ArbZG,0.8197812,0.8190646,0.8165262,0.0007165999999999562,0.0009367004386149347
+What is the statutory minimum wage in Germany?,en,out_of_scope,§ 18 Abs. 2 ArbZG,0.7867777,0.78465235,0.783182174,0.002125350000000026,0.0004591220640577376
+Darf mein Arbeitgeber mein Gehalt kürzen?,de,out_of_scope,§ 21a Abs. 7 ArbZG,0.826862,0.82677543,0.8220579920000001,8.657000000000803e-05,0.004690100438892841
+Can my employer reduce my salary without my consent?,en,out_of_scope,§ 7 Abs. 5 ArbZG,0.7927822,0.7877314,0.783568118,0.005050800000000022,0.008333716541528702
+Wie lange ist meine Kündigungsfrist?,de,out_of_scope,§ 7 Abs. 7 ArbZG,0.8602879,0.85575396,0.8523989459999999,0.0045339399999999586,0.03442269563674927
+How long is my notice period?,en,out_of_scope,§ 21a Abs. 4 ArbZG,0.81566477,0.8141054,0.810311868,0.0015593700000000599,0.003780100727453828
+Habe ich Anspruch auf Mutterschutz?,de,out_of_scope,§ 6 Abs. 4 ArbZG,0.80783826,0.8056883,0.801488752,0.0021499600000000063,0.00012198436888866127
+Am I entitled to maternity protection?,en,out_of_scope,§ 7 Abs. 2 ArbZG,0.77373,0.77251565,0.767636372,0.0012143500000000307,0.00030201391200535
+"Wie hoch muss mein Lohn sein, wenn ich nachts arbeite?",de,out_of_scope,§ 2 Abs. 4 ArbZG,0.856807,0.85649407,0.8541085340000001,0.00031292999999998905,0.2922685444355011
+Do night workers receive extra pay?,en,out_of_scope,§ 6 Abs. 5 ArbZG,0.8247308,0.82236165,0.8067561980000001,0.002369149999999931,0.4615791141986847
+Wie viele Urlaubstage bekomme ich bei einer 5-Tage-Woche?,de,out_of_scope,§ 11 Abs. 3 ArbZG,0.83910257,0.83629894,0.8338684900000001,0.002803629999999946,0.007875089533627033
+Can I take paid leave whenever I want?,en,out_of_scope,§ 7 Abs. 2 ArbZG,0.7948705,0.79412436,0.792002166,0.0007461400000000618,0.0005876466166228056
+Darf ich im Urlaub arbeiten?,de,out_of_scope,§ 9 Abs. 1 ArbZG,0.838454,0.83511543,0.834570312,0.0033385700000000407,0.0295105017721653
+Can my employer fire me during my probation period?,en,out_of_scope,§ 13 Abs. 3 ArbZG,0.7801236,0.776526,0.776224286,0.0035975999999999786,0.00015791346959304065
+Wie lange ist die Ruhezeit nach einer Schicht?,de,in_scope,§ 4 ArbZG,0.85481393,0.8523885,0.8512655240000001,0.0024254300000000617,0.8909652233123779
+Wie lange darf die Arbeitszeit sein?,de,in_scope,§ 3 ArbZG,0.891584,0.88983595,0.886675224,0.001748050000000001,0.9808031320571899
+Wann ist eine Pause vorgeschrieben?,de,in_scope,§ 4 ArbZG,0.8522787,0.8404598,0.837301886,0.011818899999999966,0.6213696002960205
+Was ist Nachtarbeit?,de,in_scope,§ 2 Abs. 4 ArbZG,0.88532233,0.8754895,0.860787166,0.009832830000000015,0.9936286807060242
+How much rest is required after work?,en,in_scope,§ 7 Abs. 9 ArbZG,0.83767533,0.836441,0.826196378,0.0012343300000000612,0.932466447353363
+How long can daily working hours be?,en,in_scope,§ 21a Abs. 4 ArbZG,0.8292841,0.8263838,0.82159392,0.002900299999999967,0.8727247714996338
+When is a break legally required?,en,in_scope,§ 13 Abs. 4 ArbZG,0.79454064,0.7939608,0.791305872,0.0005798399999999981,0.15686750411987305
+What legally counts as night time?,en,in_scope,§ 2 Abs. 3 ArbZG,0.817543,0.804948,0.7997686940000001,0.012595000000000023,0.9320572018623352
+Wie viele Stunden darf ich pro Woche arbeiten?,de,out_of_scope,§ 21a Abs. 4 ArbZG,0.88432014,0.8791778,0.8796290360000001,0.005142340000000023,0.9784553647041321
+How many hours am I allowed to work per week?,en,out_of_scope,§ 15 Abs. 4 ArbZG,0.84346884,0.84232175,0.838751688,0.0011470900000000173,0.9672636985778809
+Wie viele Pausen muss ich pro Woche machen?,de,out_of_scope,§ 21a Abs. 4 ArbZG,0.8498913,0.84788835,0.8457728019999999,0.002002950000000059,0.2514309287071228
+What is the maximum number of breaks per week?,en,out_of_scope,§ 21a Abs. 2 ArbZG,0.80564594,0.8008903,0.7983389000000001,0.00475563999999995,0.015884023159742355
+Wie viele Überstunden darf ich im Monat machen?,de,out_of_scope,§ 21a Abs. 4 ArbZG,0.8841265,0.87642884,0.876240636,0.007697660000000051,0.2601653039455414
+How many overtime hours can I work per month?,en,out_of_scope,§ 21a Abs. 4 ArbZG,0.84409773,0.8353933,0.835137026,0.008704429999999985,0.0983293354511261
+Was ist der Unterschied zwischen Arbeitszeit und Ruhezeit?,de,in_scope,§ 2 Abs. 1 ArbZG,0.885788,0.8721292,0.86673329,0.013658799999999971,0.7532474398612976
+Does a break count as working time?,en,in_scope,§ 2 Abs. 1 ArbZG,0.8210763,0.8203022,0.8173199099999999,0.0007740999999999998,0.5728969573974609
+Zählt die gesetzliche Pause zur Arbeitszeit?,de,in_scope,§ 2 Abs. 1 ArbZG,0.8667911,0.86388546,0.861139884,0.0029056400000000426,0.9454376101493835
+What is the legal difference between working time and rest time?,en,in_scope,§ 2 Abs. 1 ArbZG,0.82557726,0.8226477,0.81410885,0.0029295599999999977,0.4517642855644226
+Ist eine 30-minütige Pause bei einer langen Schicht ausreichend?,de,in_scope,§ 4 ArbZG,0.8530967,0.83674455,0.83905595,0.01635215000000001,0.8018388748168945
+Is a 30-minute break enough during a long shift?,en,in_scope,§ 4 ArbZG,0.81734705,0.8067728,0.80577367,0.010574250000000007,0.6999370455741882
+Muss ich bei genau sechs Stunden Arbeit eine Pause machen?,de,in_scope,§ 4 ArbZG,0.873878,0.86199844,0.859418984,0.011879560000000011,0.9725198149681091
+Do I need a statutory break if I work exactly six hours?,en,in_scope,§ 7 Abs. 9 ArbZG,0.818285,0.81703174,0.813938488,0.0012532600000000338,0.5703610181808472
+"Was passiert mit der Arbeitszeit, wenn ich länger als acht Stunden arbeite?",de,in_scope,§ 3 ArbZG,0.89053726,0.88124585,0.8786761820000001,0.00929141,0.863628625869751
+What happens legally if daily working time exceeds eight hours?,en,in_scope,§ 3 ArbZG,0.828145,0.82357293,0.8225214919999999,0.004572070000000039,0.8236728310585022
+Wie lange darf eine Schicht maximal dauern?,de,in_scope,§ 21a Abs. 4 ArbZG,0.8549188,0.85345745,0.8521875980000001,0.001461350000000028,0.18990375101566315
+What is the maximum legal length of a shift?,en,in_scope,§ 12 ArbZG,0.80654407,0.7974036,0.7972412280000001,0.009140469999999956,0.04943393915891647
+Kann mein Arbeitgeber meine Pausen einfach ausfallen lassen?,de,in_scope,§ 4 ArbZG,0.85163355,0.83449614,0.836578508,0.01713740999999991,0.15857656300067902
+Can my employer simply skip my statutory breaks?,en,in_scope,§ 7 Abs. 2 ArbZG,0.7930969,0.7893408,0.788922952,0.00375610000000004,0.000920465390663594
+Ich habe gestern bis Mitternacht gearbeitet und soll heute um 6 Uhr wieder anfangen. Ist das erlaubt?,de,in_scope,§ 9 Abs. 1 ArbZG,0.8609128,0.8433212,0.845287364,0.01759160000000004,0.06457177549600601
+I worked until midnight and have to start again at 6 a.m. Is that allowed?,en,in_scope,§ 9 Abs. 1 ArbZG,0.81864727,0.8126288,0.812142834,0.006018469999999998,0.02431383915245533
+Wie viele Stunden darf ich ohne Pause arbeiten?,de,in_scope,§ 4 ArbZG,0.88056064,0.8694906,0.870789094,0.011070040000000003,0.9776479005813599
+How many hours can I work without taking a break?,en,in_scope,§ 4 ArbZG,0.82397103,0.82389355,0.8212792280000001,7.748000000007416e-05,0.8677979707717896
+Wie viele Stunden darf ich an einem Werktag höchstens arbeiten?,de,in_scope,§ 3 ArbZG,0.8851456,0.8758291,0.8760847719999999,0.00931649999999995,0.9427685141563416
+What is the maximum daily working time on a working day?,en,in_scope,§ 3 ArbZG,0.8228865,0.8189317,0.8178612060000001,0.003954799999999925,0.6914582848548889
+Wie wird Nachtzeit im Arbeitszeitgesetz definiert?,de,in_scope,§ 2 Abs. 4 ArbZG,0.8874885,0.88193774,0.8786962880000001,0.005550759999999988,0.9031671285629272
+How does the Working Time Act define night time?,en,in_scope,§ 2 Abs. 4 ArbZG,0.8380894,0.83552736,0.829995912,0.002562039999999932,0.8348767757415771
+Ist meine Mittagspause gesetzlich vorgeschrieben?,de,in_scope,§ 4 ArbZG,0.8442848,0.84128666,0.836203772,0.0029981399999999825,0.01863291673362255
+Is my lunch break legally required?,en,in_scope,§ 5 Abs. 1 ArbZG,0.8001393,0.79593325,0.7934797299999999,0.004206049999999961,0.0014082178240641952
+"Wie viel Zeit muss zwischen zwei Schichten liegen, wenn ich nachts arbeite?",de,in_scope,§ 6 Abs. 2 ArbZG,0.86684585,0.85927486,0.858807556,0.007570990000000055,0.7224101424217224
+How much rest is required between shifts if I work at night?,en,in_scope,§ 9 Abs. 2 ArbZG,0.83107746,0.81747305,0.817888932,0.013604410000000011,0.4378393888473511
+Was ist die gesetzliche Definition von Arbeitszeit?,de,in_scope,§ 2 Abs. 1 ArbZG,0.8821324,0.8591672,0.86085291,0.02296520000000002,0.9801896214485168
+What is the legal definition of working time?,en,in_scope,§ 2 Abs. 1 ArbZG,0.83550686,0.8179645,0.818873384,0.01754235999999998,0.8973097801208496
+Was bedeutet Arbeitnehmer im Sinne des Arbeitszeitgesetzes?,de,in_scope,§ 2 Abs. 2 ArbZG,0.87414235,0.8666929,0.864194868,0.007449449999999969,0.9744899272918701
+Who counts as an employee under the Working Time Act?,en,in_scope,§ 2 Abs. 2 ArbZG,0.805313,0.8033414,0.7986443919999999,0.0019715999999999623,0.10557273775339127
+Was bedeutet Nachtarbeit im Sinne des Gesetzes?,de,in_scope,§ 2 Abs. 4 ArbZG,0.90101445,0.8867992,0.8689139100000001,0.014215250000000013,0.9993941783905029
+What legally qualifies as night work?,en,in_scope,§ 2 Abs. 4 ArbZG,0.8272244,0.820216,0.8100109119999999,0.007008400000000026,0.9793405532836914
+"Gilt das Arbeitszeitgesetz für mich, wenn ich selbstständig bin?",de,in_scope,§ 18 Abs. 1 ArbZG,0.8444252,0.8418369,0.841494748,0.002588299999999988,0.08476277440786362
+Does the Working Time Act apply to self-employed people?,en,in_scope,§ 18 Abs. 1 ArbZG,0.8095921,0.8057951,0.8029340640000001,0.0037970000000000503,0.009778850711882114
+"Wie lange darf ich arbeiten, wenn ich keine Pause machen möchte?",de,in_scope,§ 4 ArbZG,0.8840722,0.8741019,0.873997958,0.009970299999999988,0.7766847610473633
+"If I do not want a break, can I legally work continuously?",en,in_scope,§ 13 Abs. 4 ArbZG,0.80572516,0.80483687,0.803361432,0.0008882900000000138,0.033867109566926956
+Kann ich acht Stunden arbeiten und direkt danach wieder anfangen?,de,in_scope,§ 3 ArbZG,0.8560364,0.84623224,0.846229436,0.009804160000000062,0.42590761184692383
+Can I finish an eight-hour shift and immediately start another one?,en,in_scope,§ 15 Abs. 1 ArbZG,0.81320345,0.8075299,0.807045362,0.005673550000000027,0.013160698115825653
+Welche Vorschrift regelt die tägliche Höchstarbeitszeit?,de,in_scope,§ 11 Abs. 2 ArbZG,0.86027324,0.8567188,0.855573648,0.0035544400000000476,0.23303507268428802
+Which provision regulates maximum daily working time?,en,in_scope,§ 15 Abs. 4 ArbZG,0.7935506,0.7894214,0.7899828799999999,0.004129199999999944,0.08609523624181747
+Welche Vorschrift regelt die Ruhepausen?,de,in_scope,§ 4 ArbZG,0.86680186,0.86087346,0.858636428,0.005928400000000056,0.7027470469474792
+Which provision regulates statutory breaks?,en,in_scope,§ 15 Abs. 2 ArbZG,0.7692517,0.7666366,0.762678234,0.0026150999999999813,0.0023185275495052338

@@ -2,3 +2,5 @@ sentence-transformers>=3.0
 qdrant-client>=1.9
 openai>=1.0
 python-dotenv>=1.0
+scikit-learn>=1.4
+matplotlib>=3.8
