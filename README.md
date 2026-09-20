@@ -104,6 +104,37 @@ are confounded in this run and would need separating to attribute cleanly.
 
 ---
 
+### Abstention: can retrieval confidence tell answerable from unanswerable?
+
+The retriever always returns k chunks, so an off-topic question still gets five
+confident-looking paragraphs back. That raises the question of whether any
+retrieval signal indicates when the corpus cannot answer at all.
+
+Measured on 91 answerable and 22 unanswerable questions. AUROC is threshold-free:
+1.0 is perfect separation, 0.5 is no information.
+
+| Signal | AUROC | answerable (mean) | unanswerable (mean) |
+|---|---|---|---|
+| Cosine top-1 | 0.660 | 0.846 | 0.828 |
+| Top-1 minus top-2 gap | 0.682 | 0.007 | 0.003 |
+| Mean top-5 cosine | 0.644 | 0.836 | 0.821 |
+| **Cross-encoder top-1** | **0.828** | **0.594** | **0.159** |
+
+Cosine similarity separates the two populations by 0.018. The cross-encoder
+separates them by 0.435, roughly twenty-four times wider. Embedding similarity
+measures topical proximity, not whether a passage constitutes sufficient
+evidence, so a threshold on cosine score cannot support abstention here. A
+relevance model recovers most of that signal.
+
+Cosine separability also differs by language (German AUROC 0.806, English 0.669),
+a second cross-lingual asymmetry independent of the ranking gap above.
+
+Caveat: 22 negatives is enough to show separation exists, not enough to calibrate
+a threshold. They are also almost all out-of-corpus questions; the harder case is
+in-corpus-but-uncovered, where topically adjacent paragraphs exist.
+
+---
+
 ## Setup
 
 **1. Start Qdrant**
@@ -161,17 +192,27 @@ python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 - Cross-encoder reranking, benchmarked against the dense baseline
 - Retrieval evaluation on 91 hand-labelled questions (recall@1, recall@5, MRR,
   split by query language)
+- Abstention analysis: four retrieval confidence signals compared by AUROC on
+  answerable vs unanswerable questions
 - Answer generation grounded in retrieved paragraphs, with refusal when the
   retrieved text doesn't cover the question
 
+**In progress**
+- Claim-level evidence attribution: answers are decomposed into individual claims
+  and each is scored against the retrieved paragraphs, so support is reported per
+  sentence rather than per answer. Implemented; awaiting hand-labelled ground
+  truth to measure whether the cross-encoder signal holds at claim granularity
+  (0.828 at question level)
+
 **Next**
+- Claim taxonomy at extraction: meta-statements about the corpus are not
+  evidenceable and currently pollute attribution
+- Expand the negative set to ~60, stratified into out-of-corpus and
+  in-corpus-but-uncovered
 - Separate the reranking effect from the wider candidate pool (rerank top-5 only)
-- Hybrid retrieval (BM25 + dense) - expected gains are limited given the current
-  recall@5 ceiling of 0.90, so this is worth measuring rather than assuming
 - FastAPI service with the model loaded once at startup, Docker Compose, CI that
   fails on retrieval regression
-- Additional laws (BUrlG, MiLoG) with metadata filtering, and a router to select
-  the relevant law before retrieval
+- Additional laws (BUrlG, MiLoG) with metadata filtering and a router
 
 ---
 
