@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/assets/hero.svg" alt="german-law-rag — retrieval, rerank and attribution over German employment law" width="100%">
+<img src=".github/assets/hero.svg" alt="german-law-rag: retrieval, rerank and attribution over German employment law" width="100%">
 
 <br>
 
@@ -18,7 +18,7 @@ period waits ~30 s for a cold container, then ~60 s for the cross-encoder
 Question answering over German employment law, with exact paragraph citations.
 
 Ask *"how long is my break entitlement?"* and get an answer sourced to
-`§ 4 ArbZG` — not a page number, not a summary.
+`§ 4 ArbZG`, not a page number, not a summary.
 
 Currently indexes the **Arbeitszeitgesetz** (working time act). The pipeline
 works on any federal law from gesetze-im-internet.de.
@@ -97,7 +97,7 @@ in German and English.
 Reranking doubled English recall@1 and left German unchanged, closing a 30-point
 cross-lingual gap to one point. A cross-encoder can only reorder candidates, so
 this is direct evidence that the English deficit was a ranking failure rather than
-a retrieval failure — the correct paragraph was already being found and ordered
+a retrieval failure: the correct paragraph was already being found and ordered
 badly.
 
 <details>
@@ -185,17 +185,17 @@ predicted progress bar.
 
 What the interface shows is what the backend computed:
 
-- **Rerank ladder** — all 20 candidates in bi-encoder order against
+- **Rerank ladder**: all 20 candidates in bi-encoder order against
   cross-encoder order, with both score ranges drawn on a shared 0–1 axis. The
   cosine scores of a query typically span ~0.05 while the cross-encoder scores
   span ~0.95, which is the finding in the table above made visible per query.
-- **Index plane** — the 2-D PCA of the real 768-dim passage vectors, with the
+- **Index plane**: the 2-D PCA of the real 768-dim passage vectors, with the
   query projected through the same fitted transform. It retains ~18 % of the
   variance and is labelled as display-only; ranking uses cosine over all 768
   dimensions.
-- **Parsing diagram** — the real § structure, one cell per Absatz, cell width
+- **Parsing diagram**: the real § structure, one cell per Absatz, cell width
   proportional to its character count.
-- **Claim attribution** — each claim with its best-matching Absatz and that
+- **Claim attribution**: each claim with its best-matching Absatz and that
   cross-encoder score, including the ones below threshold.
 
 A contract check for the HTTP layer:
@@ -220,9 +220,9 @@ every serverless-function platform.
 
 `modal_app.py` describes only the image; the application it serves is the same
 `serve.app` that `uvicorn serve:app` runs locally. Layer order in that image is
-deliberate — the model download comes before any source file is copied, so
-editing the frontend does not re-download 3.5 GB of weights — and both models
-plus the Qdrant index are baked in, so a cold container starts against a built
+deliberate: the model download comes before any source file is copied, so
+editing the frontend does not re-download 3.5 GB of weights. Both models and
+the Qdrant index are baked in, so a cold container starts against a built
 index.
 
 `modal_app.py` ships the parsed `arbzg.jsonl` into the image rather than
@@ -293,7 +293,7 @@ python parse_law.py BJNR117100994.xml -o arbzg.jsonl
 ```bash
 python ingest.py
 
-# retrieval only — see which paragraphs match
+# retrieval only, see which paragraphs match
 python ingest.py --ask "Wie lange darf ich am Tag arbeiten?"
 
 # full answer, grounded in the retrieved paragraphs
@@ -342,5 +342,5 @@ python ingest.py --answer "Wie hoch ist der Mindestlohn?"
 
 Not legal advice.
 
-Source: [gesetze-im-internet.de](https://www.gesetze-im-internet.de) — German
+Source: [gesetze-im-internet.de](https://www.gesetze-im-internet.de). German
 federal law is public domain under § 5 UrhG.

@@ -210,7 +210,7 @@ def hero(frames, payloads, variance, edges):
     )
 
     query = '--answer "Wie lange sind meine Ruhepausen?"'
-    answer = "§ 4 ArbZG — 30 min bei 6–9 h Arbeitszeit"
+    answer = "§ 4 ArbZG: 30 min bei 6–9 h Arbeitszeit"
     qw, steps = 416, 32
     tick_times = ";".join(f"{i / 64:.4f}" for i in range(steps))
     widths = ";".join(f"{qw * min(i, len(query)) / len(query):.1f}" for i in range(steps))
@@ -384,7 +384,7 @@ def results():
         f'stroke="{PANEL}"/>'
         f'<text x="{left + 16}" y="{baseline + 59}" font-family="{SANS}" font-size="13" '
         f'fill="{MUTED}">English recall@1 <tspan fill="{RED}">0.29</tspan> to '
-        f'<tspan fill="{GOLD}" font-weight="700">0.60</tspan> &#8212; the 30-point cross-lingual '
+        f'<tspan fill="{GOLD}" font-weight="700">0.60</tspan>. The 30-point cross-lingual '
         f'gap closes to one point.</text></g>'
     )
     return svg(width, height, "".join(body))
@@ -429,7 +429,7 @@ def abstention():
                 f'font-size="10" fill="{DIM}">{tick / 10:.1f}</text>'
             )
         xy, xn = left + axis_w * yes, left + axis_w * no
-        # When the two means nearly coincide — which is the finding for cosine — their
+        # When the two means nearly coincide, which is the finding for cosine, their
         # value labels have to stack instead of overlap.
         crowded = abs(xy - xn) < 64
         for value, x, colour, label, dy, label_y in (
