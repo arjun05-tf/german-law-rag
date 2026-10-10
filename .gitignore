@@ -1,6 +1,7 @@
 *.xml
 *.zip
 *.jsonl
+*.bak
 qdrant_data/
 __pycache__/
 .env
