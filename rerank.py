@@ -29,18 +29,25 @@ def load_reranker():
     return _model
 
 
-def rerank(question, hits, top_k=5):
+def rerank(question, hits, top_k=5, with_scores=False):
     """Reorder hits by cross-encoder relevance, return the top_k.
 
     Scores are not comparable to the bi-encoder's cosine similarity - different
     model, different scale. Only the resulting order is meaningful.
+
+    with_scores also returns {hit.id: score} for *every* candidate, including
+    the ones that did not survive. The scoring pass already computed them, and
+    showing what the reranker demoted needs the losers too.
     """
     if not hits:
-        return hits
+        return (hits, {}) if with_scores else hits
 
     model = load_reranker()
     pairs = [(question, h.payload["text"]) for h in hits]
     scores = model.predict(pairs)
 
     ranked = sorted(zip(hits, scores), key=lambda p: p[1], reverse=True)
-    return [h for h, _ in ranked[:top_k]]
+    top = [h for h, _ in ranked[:top_k]]
+    if with_scores:
+        return top, {h.id: float(s) for h, s in zip(hits, scores)}
+    return top

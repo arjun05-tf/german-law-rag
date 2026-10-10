@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ArbZG · Retrieval</title>
+<meta name="description" content="Fragen zum Arbeitszeitgesetz, beantwortet mit absatzgenauen Zitaten. Dense Retrieval, Cross-Encoder-Reranking und Claim-Attribution sichtbar gemacht.">
+<!-- Where the pipeline runs. Empty = same origin, which is what `uvicorn serve:app`
+     gives you. A static deploy of this folder needs the backend's URL here. -->
+<meta name="api-base" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<header class="bar">
+  <div class="bar__id">
+    <span class="bar__gesetz" id="bar-gesetz">ArbZG</span>
+    <span class="bar__full">Arbeitszeitgesetz</span>
+  </div>
+  <dl class="bar__facts" id="bar-facts" aria-label="Index"></dl>
+  <nav class="bar__nav" aria-label="Ansicht">
+    <button type="button" class="tab is-active" data-view="query" aria-current="page">Abfrage</button>
+    <button type="button" class="tab" data-view="pipeline">Pipeline</button>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ===================== QUERY VIEW ===================== -->
+<section id="view-query" class="view">
+
+  <div class="stage-hero" id="hero">
+    <div class="hero__field" id="field-slot-hero" aria-hidden="true">
+      <span class="hero__field-cap">Der Index &middot; 80 Absätze</span>
+    </div>
+    <div class="hero__inner">
+      <p class="eyebrow">Absatzgenaue Rechtsauskunft</p>
+      <h1 class="hero__title">Eine Frage in <em>natürlicher Sprache</em>, eine Antwort mit nachprüfbarer Fundstelle.</h1>
+      <p class="hero__sub">80 Absätze des Arbeitszeitgesetzes, dicht indexiert und von einem
+        Cross-Encoder neu geordnet. Jeder Satz der Antwort zeigt den Absatz, aus dem er stammt.</p>
+
+      <form class="ask" id="ask-form" autocomplete="off">
+        <label class="ask__label" for="q">Ihre Frage — deutsch oder englisch</label>
+        <div class="ask__row">
+          <textarea id="q" name="q" rows="1" class="ask__input" required
+            placeholder="Wie lange sind meine Ruhepausen?"
+            aria-describedby="ask-hint"></textarea>
+          <button type="submit" class="ask__go" id="ask-go">
+            <span class="ask__go-text">Suchen</span>
+            <svg class="ask__go-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h12M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+        </div>
+        <p class="ask__hint" id="ask-hint">Mehrsprachiger Index — englische Fragen treffen deutschen Gesetzestext.</p>
+      </form>
+
+      <div class="examples" id="examples">
+        <span class="examples__lead">Beispiele</span>
+        <button type="button" class="chip" data-lang="de">Wie lange sind meine Ruhepausen?</button>
+        <button type="button" class="chip" data-lang="en">How many hours may I work per day?</button>
+        <button type="button" class="chip" data-lang="de">Darf ich sonntags arbeiten?</button>
+        <button type="button" class="chip" data-lang="en">What rest period applies between two shifts?</button>
+        <button type="button" class="chip chip--neg" data-lang="de">Wie hoch ist der Mindestlohn?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- stage rail: driven by real SSE stage events -->
+  <div class="rail-wrap" id="rail-wrap" hidden>
+    <ol class="rail" id="rail" aria-live="polite" aria-label="Pipeline-Fortschritt"></ol>
+    <button type="button" class="rail__cancel" id="rail-cancel">Abbrechen</button>
+  </div>
+
+  <div class="error-plate" id="error-plate" hidden role="alert"></div>
+
+  <!-- ===================== RESULTS ===================== -->
+  <div class="results" id="results" hidden>
+
+    <div class="asked" id="asked"></div>
+
+    <article class="answer-plate" id="answer-plate">
+      <header class="plate-head">
+        <h2>Antwort</h2>
+        <p class="plate-head__note" id="answer-note"></p>
+      </header>
+      <div class="answer__body" id="answer-body"></div>
+      <div class="claims" id="claims"></div>
+    </article>
+
+    <!-- the centrepiece -->
+    <figure class="plate plate--dark ladder-plate" id="ladder-plate">
+      <figcaption class="plate__cap">
+        <div>
+          <h2>Neuordnung durch den Cross-Encoder</h2>
+          <p>Links die Reihenfolge des Bi-Encoders nach Kosinus-Ähnlichkeit, rechts die
+             Reihenfolge nach gemeinsamer Bewertung von Frage und Absatz. Gemessene Werte
+             dieser Abfrage.</p>
+        </div>
+        <dl class="spread" id="spread" aria-label="Wertebereich"></dl>
+      </figcaption>
+      <div class="ladder" id="ladder"></div>
+    </figure>
+
+    <section class="evidence" id="evidence-wrap" aria-labelledby="ev-h">
+      <header class="plate-head">
+        <h2 id="ev-h">Fundstellen</h2>
+        <p class="plate-head__note">Die Absätze, die der Antwort zugrunde liegen — Originaltext, aufklappbar.</p>
+      </header>
+      <ol class="evidence__list" id="evidence"></ol>
+      <details class="demoted" id="demoted-wrap">
+        <summary><span id="demoted-count"></span></summary>
+        <ol class="demoted__list" id="demoted"></ol>
+      </details>
+    </section>
+
+    <figure class="plate plate--dark field-plate">
+      <figcaption class="plate__cap">
+        <div>
+          <h2>Der Index als Fläche</h2>
+          <p id="field-note">Jeder Punkt ist ein indexierter Absatz.</p>
+        </div>
+      </figcaption>
+      <div class="field-slot" id="field-slot-results"></div>
+      <div class="field-legend" id="field-legend"></div>
+    </figure>
+
+    <section class="timings-wrap">
+      <h2 class="timings__h">Gemessene Laufzeit dieser Abfrage</h2>
+      <dl class="timings" id="timings"></dl>
+      <p class="timings__note">Gemessen auf dieser Maschine, CPU-Inferenz. Reranking und
+        Attribution sind die teuren Schritte, weil der Cross-Encoder jedes Paar einzeln liest.</p>
+    </section>
+
+  </div>
+</section>
+
+<!-- ===================== PIPELINE VIEW ===================== -->
+<section id="view-pipeline" class="view" hidden>
+  <div class="prose">
+    <p class="eyebrow">Architektur</p>
+    <h1 class="pipe__title">Wie aus einem Gesetzestext eine belegte Antwort wird</h1>
+    <p class="lede">Zwei Dinge passieren zu verschiedenen Zeiten. Das Parsen, Einbetten und
+      Indexieren läuft <strong>einmal offline</strong>. Nur die untere Reihe läuft, wenn Sie
+      eine Frage stellen.</p>
+  </div>
+
+  <figure class="plate plate--dark ingest-plate">
+    <figcaption class="plate__cap">
+      <div>
+        <h2>Offline — Parsen und Indexieren</h2>
+        <p>Die amtliche XML-Fassung wird in absatzgenaue, einzeln zitierbare Einheiten zerlegt.</p>
+      </div>
+      <span class="badge badge--offline">läuft nicht pro Abfrage</span>
+    </figcaption>
+    <div class="ingest" id="ingest"></div>
+  </figure>
+
+  <div class="online-stages" id="online-stages"></div>
+
+  <div class="prose">
+    <h2 class="pipe__h">Gemessene Ergebnisse</h2>
+    <p>Retrieval, bewertet auf 91 handmarkierten Fragen mit Soll-Fundstelle, deutsch und
+      englisch. Die Zahlen stammen aus <code>eval/run_eval.py</code> und
+      <code>eval/abstention_probe.py</code>.</p>
+  </div>
+  <div class="tables" id="tables"></div>
+
+  <div class="prose">
+    <h2 class="pipe__h">Was dieses System nicht kann</h2>
+    <ul class="limits">
+      <li>Es indexiert <strong>ein</strong> Gesetz. Fragen außerhalb des Arbeitszeitgesetzes
+        kann es nicht beantworten — und erkennt das nur unvollkommen.</li>
+      <li>Der Abstention-Schwellwert ist nicht kalibriert: 22 Negativbeispiele zeigen, dass
+        eine Trennung existiert, nicht wo sie liegen sollte.</li>
+      <li>Szenariofragen scheitern oft schon im Retrieval. Ein Reranker kann nur umsortieren,
+        was der erste Schritt gefunden hat.</li>
+      <li>Keine Rechtsberatung.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>Quelle: <a href="https://www.gesetze-im-internet.de/arbzg/" rel="noopener">gesetze-im-internet.de</a>
+     — Bundesrecht ist nach § 5 UrhG gemeinfrei.</p>
+  <p class="foot__warn">Keine Rechtsberatung.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

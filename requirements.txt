@@ -4,3 +4,5 @@ openai>=1.0
 python-dotenv>=1.0
 scikit-learn>=1.4
 matplotlib>=3.8
+fastapi>=0.111
+uvicorn[standard]>=0.30
