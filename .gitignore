@@ -5,3 +5,5 @@
 qdrant_data/
 __pycache__/
 .env
+
+.vercel

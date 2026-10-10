@@ -10,6 +10,9 @@
 ![Corpus](https://img.shields.io/badge/corpus-80%20Abs%C3%A4tze-a78bfa?style=flat-square&labelColor=0b0f14)
 ![recall@1](https://img.shields.io/badge/recall%401-0.60-e0564f?style=flat-square&labelColor=0b0f14)
 
+**[Try it live →](https://german-law-rag.vercel.app)**  ·  first query after an idle
+period waits ~30 s for a cold container, then ~60 s for the cross-encoder
+
 </div>
 
 Question answering over German employment law, with exact paragraph citations.
@@ -203,39 +206,53 @@ python test_serve.py          # needs the server already running
 
 ### Deploy
 
+Live: **[german-law-rag.vercel.app](https://german-law-rag.vercel.app)**
+
 The two halves have opposite requirements, so they are hosted apart. The
 frontend is static files; the backend holds `multilingual-e5-base` and
 `bge-reranker-v2-m3` in memory, roughly 3.5 GB of weights, which rules out
-every serverless platform.
+every serverless-function platform.
 
 | Half | Host | Why |
 |---|---|---|
 | `web/` | Vercel | static, no build step (`vercel.json`) |
-| `serve.py` | Hugging Face Space, Docker SDK | free CPU tier has the RAM for both models |
+| `serve.py` | Modal (`modal_app.py`) | 4 GB container, scales to zero between queries |
 
-`deploy/space/` is the whole Space: a `Dockerfile` that clones this repo,
-derives `arbzg.jsonl` from the official XML, and bakes both models and the
-Qdrant index into the image so the first query doesn't pay for them.
+`modal_app.py` describes only the image; the application it serves is the same
+`serve.app` that `uvicorn serve:app` runs locally. Layer order in that image is
+deliberate — the model download comes before any source file is copied, so
+editing the frontend does not re-download 3.5 GB of weights — and both models
+plus the Qdrant index are baked in, so a cold container starts against a built
+index.
+
+`modal_app.py` ships the parsed `arbzg.jsonl` into the image rather than
+re-downloading the law at build time, so run **Setup** below before deploying.
 
 ```bash
-# backend
-hf auth login
-hf repo create german-law-rag --repo-type space --space_sdk docker
-git clone https://huggingface.co/spaces/<user>/german-law-rag space && cd space
-cp ../deploy/space/* . && git add -A && git commit -m "backend" && git push
+pip install modal && modal setup
+modal secret create german-law-rag-openai OPENAI_API_KEY=sk-...
+modal deploy modal_app.py          # prints the backend URL
 
-# frontend — after setting <meta name="api-base"> in web/index.html
-# to https://<user>-german-law-rag.hf.space
-npx vercel && npx vercel --prod
+# put that URL in web/index.html as <meta name="api-base">, then
+vercel --prod
 ```
 
-Set `OPENAI_API_KEY` as a Space secret for generation, and `CORS_ORIGINS` to
-the Vercel origin once it exists. The frontend treats `localhost` as
-same-origin regardless of that meta tag, so local development is unaffected.
+The frontend treats `localhost` as same-origin whatever that meta tag says, so
+local development is unaffected by the deployed backend.
 
-Reranking 20 candidates takes about a minute on the free CPU tier. The stream
-is what makes that bearable: dense candidates render as soon as the vector
-search returns.
+Measured on the deployed stack, warm, for *"Wie lange sind meine Ruhepausen?"*:
+
+| Stage | ms |
+|---|---|
+| embed | 127 |
+| search | 5 |
+| rerank (20 candidates) | 33,021 |
+| generate | 5,377 |
+| attribute (4 claims) | 24,428 |
+
+The cross-encoder dominates, which is why the interface streams: the dense
+candidates are on screen in under a second, and each later stage lands when it
+is actually done. A cold container adds roughly 30 s before any of that.
 
 ---
 
