@@ -1,24 +1,28 @@
 """
 Do retrieval confidence signals separate answerable from unanswerable questions?
 
-This is a probe, not a system change. It runs both populations through the
-existing retriever, records several candidate confidence signals per question,
-and reports how well each one separates them.
+First run gave cosine AUROC 0.660 against cross-encoder 0.828, on 22 negatives
+that were almost all out-of-corpus: the governing law simply was not indexed.
+That is the easy case. This version splits the negatives by type, because the
+two failure modes are not the same problem:
 
-Populations come from questions.jsonl:
-  in_scope      expected is non-empty: the corpus contains the answer
-  out_of_scope  expected is empty: it does not
+  out_of_corpus        the answer's law is not indexed at all
+  in_corpus_uncovered  the law IS indexed but does not address the question.
+                       Topically adjacent paragraphs sit right there, so the
+                       retriever returns high-scoring candidates and the answer
+                       looks well-grounded. This is where confident fabrication
+                       actually happens, and where an abstention signal has to
+                       work if it is worth anything.
 
-AUROC is the metric for RQ1 because it is threshold-free. Picking a threshold
-first and reporting accuracy hides whether the signal is any good: a signal that
-cannot separate the populations will still look fine at a threshold that just
-predicts the majority class.
+Prediction to record before running: separability drops on in_corpus_uncovered
+for every signal, and drops furthest for cosine, which cannot tell "this passage
+is about the right topic" from "this passage answers the question".
 
     pip install scikit-learn matplotlib
 
 Usage:
     python eval/abstention_probe.py
-    python eval/abstention_probe.py --rerank      # adds the cross-encoder signal
+    python eval/abstention_probe.py --rerank
 """
 
 import argparse
@@ -38,18 +42,25 @@ from run_eval import QUESTIONS, load_questions
 OUT_DIR = Path(__file__).parent / "results"
 K = 5
 
+_ce = None
+
+
+def load_ce():
+    global _ce
+    if _ce is None:
+        from sentence_transformers import CrossEncoder
+        _ce = CrossEncoder("BAAI/bge-reranker-v2-m3")
+    return _ce
+
 
 def signals(hits, question, use_rerank):
-    """Candidate abstention signals, all derived from one retrieval call.
+    """Candidate abstention signals, all from one retrieval call.
 
     top1      raw confidence in the best candidate
-    gap       top1 minus top2. A large gap means the retriever found one clear
-              match; a small gap means everything looked equally plausible, which
-              is what an unanswerable question should look like
+    gap       top1 minus top2. A large gap means one clear match; a small gap
+              means everything looked equally plausible
     mean_top5 whether the whole neighbourhood is relevant or just one outlier
-    rerank1   a cross-encoder relevance judgment rather than geometric proximity.
-              Prediction: this separates better than cosine, because cosine was
-              never optimised for "is this sufficient evidence"
+    rerank1   a learned relevance judgment rather than geometric proximity
     """
     scores = [h.score for h in hits]
     row = {
@@ -60,14 +71,8 @@ def signals(hits, question, use_rerank):
     row["gap"] = row["top1"] - row["top2"]
 
     if use_rerank:
-        from sentence_transformers import CrossEncoder
-        global _ce
-        try:
-            _ce
-        except NameError:
-            _ce = CrossEncoder("BAAI/bge-reranker-v2-m3")
         pairs = [(question, h.payload["text"]) for h in hits]
-        row["rerank1"] = float(max(_ce.predict(pairs))) if pairs else 0.0
+        row["rerank1"] = float(max(load_ce().predict(pairs))) if pairs else 0.0
 
     return row
 
@@ -84,13 +89,13 @@ def collect(use_rerank):
             query=embed_query(model, r["question"]).tolist(),
             limit=K,
         ).points
+        answerable = bool(r["expected"])
         out.append({
             "question": r["question"],
             "lang": r.get("lang", "?"),
-            # The label IS the population: a non-empty expected list means the
-            # corpus can answer it. This is why auditing those labels matters -
-            # a mislabelled question lands in the wrong distribution.
-            "population": "in_scope" if r["expected"] else "out_of_scope",
+            "population": "in_scope" if answerable else "out_of_scope",
+            # blank for answerable questions; the stratum for the rest
+            "negative_type": "" if answerable else r.get("negative_type", "untagged"),
             "top_citation": hits[0].payload["citation"] if hits else "",
             **signals(hits, r["question"], use_rerank),
         })
@@ -98,12 +103,7 @@ def collect(use_rerank):
 
 
 def auroc(rows, signal):
-    """Separability of the two populations by one signal.
-
-    1.0 = perfect separation, 0.5 = the signal carries no information.
-    Labelled so that in_scope is the positive class: higher confidence should
-    mean more answerable.
-    """
+    """1.0 = perfect separation, 0.5 = the signal carries no information."""
     y = [1 if r["population"] == "in_scope" else 0 for r in rows]
     x = [r[signal] for r in rows]
     if len(set(y)) < 2:
@@ -111,49 +111,69 @@ def auroc(rows, signal):
     return roc_auc_score(y, x)
 
 
-def report(rows, signal_names):
+def table(rows, signal_names, title):
     n_in = sum(1 for r in rows if r["population"] == "in_scope")
     n_out = len(rows) - n_in
-    print(f"\nin_scope n={n_in}   out_of_scope n={n_out}")
-
-    if n_out < 30:
-        print(f"WARNING: {n_out} negatives is too few for calibration work. "
-              "Enough to see whether separation exists, not to calibrate a threshold.")
-
-    print(f"\n{'signal':<12} {'AUROC':>7}   {'in_scope mean':>14} {'out mean':>10}")
-    print("-" * 50)
+    print(f"\n{title}   (answerable {n_in}, unanswerable {n_out})")
+    print(f"{'signal':<12} {'AUROC':>7}   {'answerable':>11} {'unanswerable':>13}")
+    print("-" * 48)
     for s in signal_names:
         a = auroc(rows, s)
+        if a is None:
+            continue
         m_in = sum(r[s] for r in rows if r["population"] == "in_scope") / max(n_in, 1)
         m_out = sum(r[s] for r in rows if r["population"] == "out_of_scope") / max(n_out, 1)
-        print(f"{s:<12} {a:>7.3f}   {m_in:>14.3f} {m_out:>10.3f}")
+        print(f"{s:<12} {a:>7.3f}   {m_in:>11.3f} {m_out:>13.3f}")
 
-    # Per-language split: if separability differs, abstention needs different
-    # thresholds per language, which is RQ3.
-    print(f"\nper language (top1 AUROC):")
+
+def report(rows, signal_names):
+    table(rows, signal_names, "ALL NEGATIVES")
+
+    # The split that matters. Each stratum is scored against the same answerable
+    # pool, so the AUROCs are directly comparable.
+    in_scope = [r for r in rows if r["population"] == "in_scope"]
+    strata = sorted({r["negative_type"] for r in rows if r["negative_type"]})
+
+    for stratum in strata:
+        subset = in_scope + [r for r in rows if r["negative_type"] == stratum]
+        n = len(subset) - len(in_scope)
+        if n < 8:
+            print(f"\n{stratum}: only {n} negatives, skipping")
+            continue
+        table(subset, signal_names, f"NEGATIVES: {stratum}")
+
+    print("\nper language (top1 AUROC, all negatives):")
     for lang in sorted({r["lang"] for r in rows}):
         subset = [r for r in rows if r["lang"] == lang]
         a = auroc(subset, "top1")
-        n = len(subset)
-        print(f"  {lang:<4} n={n:<4} AUROC={a:.3f}" if a else f"  {lang:<4} n={n:<4} (single class)")
+        print(f"  {lang:<4} n={len(subset):<4} " + (f"AUROC={a:.3f}" if a else "(single class)"))
 
 
 def plot(rows, signal_names):
     OUT_DIR.mkdir(exist_ok=True)
-    fig, axes = plt.subplots(1, len(signal_names), figsize=(5 * len(signal_names), 4))
-    if len(signal_names) == 1:
-        axes = [axes]
+    strata = sorted({r["negative_type"] for r in rows if r["negative_type"]})
+    in_scope = [r for r in rows if r["population"] == "in_scope"]
 
-    for ax, s in zip(axes, signal_names):
-        for pop, colour in [("in_scope", "tab:blue"), ("out_of_scope", "tab:red")]:
-            vals = [r[s] for r in rows if r["population"] == pop]
-            ax.hist(vals, bins=20, alpha=0.6, label=pop, color=colour)
-        ax.set_title(f"{s} (AUROC {auroc(rows, s):.3f})")
-        ax.set_xlabel(s)
-        ax.legend()
+    fig, axes = plt.subplots(len(strata), len(signal_names),
+                             figsize=(5 * len(signal_names), 4 * len(strata)),
+                             squeeze=False)
+
+    for i, stratum in enumerate(strata):
+        negs = [r for r in rows if r["negative_type"] == stratum]
+        subset = in_scope + negs
+        for j, s in enumerate(signal_names):
+            ax = axes[i][j]
+            ax.hist([r[s] for r in in_scope], bins=20, alpha=0.6,
+                    label="answerable", color="tab:blue")
+            ax.hist([r[s] for r in negs], bins=20, alpha=0.6,
+                    label=stratum, color="tab:red")
+            a = auroc(subset, s)
+            ax.set_title(f"{s} vs {stratum}" + (f"  (AUROC {a:.3f})" if a else ""))
+            ax.set_xlabel(s)
+            ax.legend(fontsize=8)
 
     fig.tight_layout()
-    path = OUT_DIR / "abstention_signals.png"
+    path = OUT_DIR / "abstention_by_stratum.png"
     fig.savefig(path, dpi=120)
     print(f"\nplot -> {path}")
 
@@ -164,10 +184,7 @@ def main():
     args = ap.parse_args()
 
     rows = collect(args.rerank)
-
-    names = ["top1", "gap", "mean_top5"]
-    if args.rerank:
-        names.append("rerank1")
+    names = ["top1", "gap", "mean_top5"] + (["rerank1"] if args.rerank else [])
 
     OUT_DIR.mkdir(exist_ok=True)
     csv_path = OUT_DIR / "abstention_signals.csv"
